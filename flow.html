@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Free Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #game-board {
+            display: grid;
+            gap: 2px;
+            background: #ddd;
+            padding: 2px;
+            border-radius: 5px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .cell:hover {
+            background: #f0f0f0;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        button:hover {
+            background: #34495e;
+        }
+
+        .color-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-dot.selected {
+            border-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Flow Free</h1>
+        <p>Connect matching colors with pipes!</p>
+    </header>
+
+    <div class="game-container">
+        <div id="game-board"></div>
+        <div class="controls">
+            <button onclick="resetGame()">Reset</button>
+            <button onclick="checkWin()">Check Solution</button>
+        </div>
+    </div>
+
+    <script>
+        const BOARD_SIZE = 8;
+        const COLORS = [
+            '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
+            '#FF00FF', '#00FFFF', '#FFA500', '#800080'
+        ];
+        let selectedColor = null;
+        let gameBoard = [];
+        let dots = [];
+
+        function initializeBoard() {
+            const board = document.getElementById('game-board');
+            board.style.gridTemplateColumns = `repeat(${BOARD_SIZE}, 40px)`;
+            
+            // Initialize empty board
+            for (let i = 0; i < BOARD_SIZE; i++) {
+                gameBoard[i] = [];
+                for (let j = 0; j < BOARD_SIZE; j++) {
+                    gameBoard[i][j] = null;
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.addEventListener('click', () => handleCellClick(i, j));
+                    board.appendChild(cell);
+                }
+            }
+
+            // Place random dots
+            placeRandomDots();
+        }
+
+        function placeRandomDots() {
+            const numPairs = 4; // Number of color pairs
+            dots = [];
+
+            for (let i = 0; i < numPairs; i++) {
+                const color = COLORS[i];
+                // Place first dot
+                let row1, col1;
+                do {
+                    row1 = Math.floor(Math.random() * BOARD_SIZE);
+                    col1 = Math.floor(Math.random() * BOARD_SIZE);
+                } while (gameBoard[row1][col1] !== null);
+
+                // Place second dot
+                let row2, col2;
+                do {
+                    row2 = Math.floor(Math.random() * BOARD_SIZE);
+                    col2 = Math.floor(Math.random() * BOARD_SIZE);
+                } while (gameBoard[row2][col2] !== null || 
+                        (row1 === row2 && col1 === col2));
+
+                gameBoard[row1][col1] = color;
+                gameBoard[row2][col2] = color;
+                dots.push({row: row1, col: col1, color: color});
+                dots.push({row: row2, col: col2, color: color});
+
+                updateBoard();
+            }
+        }
+
+        function handleCellClick(row, col) {
+            if (gameBoard[row][col] === null) {
+                if (selectedColor) {
+                    gameBoard[row][col] = selectedColor;
+                    updateBoard();
+                }
+            } else {
+                selectedColor = gameBoard[row][col];
+            }
+        }
+
+        function updateBoard() {
+            const cells = document.getElementsByClassName('cell');
+            for (let i = 0; i < BOARD_SIZE; i++) {
+                for (let j = 0; j < BOARD_SIZE; j++) {
+                    const cell = cells[i * BOARD_SIZE + j];
+                    cell.style.backgroundColor = gameBoard[i][j] || 'white';
+                }
+            }
+        }
+
+        function resetGame() {
+            gameBoard = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(null));
+            placeRandomDots();
+            selectedColor = null;
+        }
+
+        function checkWin() {
+            // Simple win condition: all cells are filled
+            for (let i = 0; i < BOARD_SIZE; i++) {
+                for (let j = 0; j < BOARD_SIZE; j++) {
+                    if (gameBoard[i][j] === null) {
+                        alert('Not complete yet!');
+                        return;
+                    }
+                }
+            }
+            alert('Congratulations! You won!');
+        }
+
+        // Initialize the game
+        initializeBoard();
+    </script>
+</body>
+</html>
