@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galaga Game</title>
+  <style>
+    body {
+      background: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    #gameCanvas {
+      background: #000;
+      border: 2px solid #fff;
+      display: block;
+      margin: 0 auto;
+    }
+    #score {
+      margin: 10px 0 20px 0;
+      font-size: 1.2em;
+    }
+    #gameOver {
+      color: #ff4444;
+      font-size: 2em;
+      margin-top: 20px;
+      display: none;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: #44c767;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+    }
+    button:hover {
+      background: #5cbf2a;
+    }
+  </style>
+</head>
+<body>
+  <h1>Galaga</h1>
+  <div id="score">Score: 0</div>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <div id="gameOver">Game Over!</div>
+  <button id="restartBtn">Restart</button>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const gameOverEl = document.getElementById('gameOver');
+    const restartBtn = document.getElementById('restartBtn');
+
+    // Game state
+    let player, bullets, enemies, score, gameLoop, isGameOver;
+    const PLAYER_SPEED = 5;
+    const BULLET_SPEED = 7;
+    const ENEMY_SPEED = 2;
+    const ENEMY_SPAWN_RATE = 1500; // milliseconds
+
+    function resetGame() {
+      player = {
+        x: canvas.width / 2 - 15,
+        y: canvas.height - 50,
+        width: 30,
+        height: 30,
+        speed: PLAYER_SPEED
+      };
+      bullets = [];
+      enemies = [];
+      score = 0;
+      isGameOver = false;
+      scoreEl.textContent = 'Score: ' + score;
+      gameOverEl.style.display = 'none';
+      restartBtn.style.display = 'none';
+      if (gameLoop) cancelAnimationFrame(gameLoop);
+      gameLoop = requestAnimationFrame(gameLoop);
+      spawnEnemies();
+    }
+
+    function spawnEnemies() {
+      if (window.enemySpawnInterval) {
+        clearInterval(window.enemySpawnInterval);
+      }
+      window.enemySpawnInterval = setInterval(() => {
+        if (!isGameOver) {
+          enemies.push({
+            x: Math.random() * (canvas.width - 30),
+            y: -30,
+            width: 30,
+            height: 30,
+            speed: ENEMY_SPEED
+          });
+        }
+      }, ENEMY_SPAWN_RATE);
+    }
+
+    function update() {
+      // Update bullets
+      bullets = bullets.filter(bullet => {
+        bullet.y -= BULLET_SPEED;
+        return bullet.y > 0;
+      });
+
+      // Update enemies
+      enemies = enemies.filter(enemy => {
+        enemy.y += enemy.speed;
+        
+        // Check collision with bullets
+        for (let i = bullets.length - 1; i >= 0; i--) {
+          if (checkCollision(bullets[i], enemy)) {
+            bullets.splice(i, 1);
+            score += 100;
+            scoreEl.textContent = 'Score: ' + score;
+            return false;
+          }
+        }
+
+        // Check collision with player
+        if (checkCollision(enemy, player)) {
+          endGame();
+          return false;
+        }
+
+        return enemy.y < canvas.height;
+      });
+    }
+
+    function checkCollision(rect1, rect2) {
+      return rect1.x < rect2.x + rect2.width &&
+             rect1.x + rect1.width > rect2.x &&
+             rect1.y < rect2.y + rect2.height &&
+             rect1.y + rect1.height > rect2.y;
+    }
+
+    function draw() {
+      // Clear canvas
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw player
+      ctx.fillStyle = '#44c767';
+      ctx.beginPath();
+      ctx.moveTo(player.x + player.width / 2, player.y);
+      ctx.lineTo(player.x, player.y + player.height);
+      ctx.lineTo(player.x + player.width, player.y + player.height);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw bullets
+      ctx.fillStyle = '#fff';
+      bullets.forEach(bullet => {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+      });
+
+      // Draw enemies
+      ctx.fillStyle = '#ff4444';
+      enemies.forEach(enemy => {
+        ctx.beginPath();
+        ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+        ctx.lineTo(enemy.x, enemy.y);
+        ctx.lineTo(enemy.x + enemy.width, enemy.y);
+        ctx.closePath();
+        ctx.fill();
+      });
+    }
+
+    function endGame() {
+      cancelAnimationFrame(gameLoop);
+      if (window.enemySpawnInterval) {
+        clearInterval(window.enemySpawnInterval);
+      }
+      isGameOver = true;
+      gameOverEl.style.display = 'block';
+      restartBtn.style.display = 'inline-block';
+    }
+
+    // Input handling
+    let keys = {};
+    document.addEventListener('keydown', e => {
+      keys[e.key] = true;
+      if (e.key === ' ' && !isGameOver) {
+        bullets.push({
+          x: player.x + player.width / 2 - 2,
+          y: player.y,
+          width: 4,
+          height: 10
+        });
+      }
+    });
+
+    document.addEventListener('keyup', e => {
+      keys[e.key] = false;
+    });
+
+    function handleInput() {
+      if (keys['ArrowLeft'] && player.x > 0) {
+        player.x -= player.speed;
+      }
+      if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+        player.x += player.speed;
+      }
+    }
+
+    // Game loop
+    function gameLoop() {
+      if (!isGameOver) {
+        handleInput();
+        update();
+        draw();
+        gameLoop = requestAnimationFrame(gameLoop);
+      }
+    }
+
+    restartBtn.addEventListener('click', resetGame);
+
+    // Start the game
+    resetGame();
+  </script>
+</body>
+</html> 

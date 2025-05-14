@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Wayne - Development Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .linkedin-content {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #0077b5;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+
+        .development-process {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .development-process h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .development-process ul {
+            list-style-position: inside;
+            margin-bottom: 1rem;
+        }
+
+        .development-process li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links a:hover {
+            background: #f8f9fa;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .linkedin-content {
+                flex-direction: column;
+            }
+            .profile-pic {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>About Wayne</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="aboutme.html">About Me</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>About Me</h2>
+            <div class="linkedin-content">
+                <div class="profile-info">
+                    <img src="https://media.licdn.com/dms/image/D5603AQFQzXHhQZQZzg/profile-displayphoto-shrink_400_400/0/1709234567890?e=1721865600&v=beta&t=YOUR_IMAGE_ID" alt="Wayne's Profile" class="profile-pic">
+                    <h3>Wayne</h3>
+                    <p>Software Developer | AI Enthusiast | Problem Solver</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/wayneef" target="_blank">LinkedIn</a>
+                        <a href="https://github.com/wayneef" target="_blank">GitHub</a>
+                    </div>
+                </div>
+                <div class="development-process">
+                    <h3>Development Process with Cursor</h3>
+                    <p>This site is part of my exploration into rapid development using Cursor IDE. Here's what I'm testing:</p>
+                    <ul>
+                        <li>Using AI-assisted coding to quickly prototype web applications</li>
+                        <li>Implementing responsive designs with minimal manual coding</li>
+                        <li>Testing the integration of various web technologies</li>
+                        <li>Exploring efficient ways to manage and deploy web projects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Wayne's Development Playground. All rights reserved.</p>
+    </footer>
+</body>
+</html> 

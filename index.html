@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <title>Wayne's Development Playground</title>
     <style>
         * {
             margin: 0;
@@ -36,6 +36,14 @@
             flex: 1;
         }
 
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
         .game-container {
             background: white;
             border-radius: 8px;
@@ -51,25 +59,23 @@
             display: block;
         }
 
-        .instructions {
+        .nav-links {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
             background: white;
-            padding: 2rem;
-            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .instructions h2 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .instructions ul {
-            list-style-position: inside;
-            margin-bottom: 1rem;
-        }
-
-        .instructions li {
-            margin-bottom: 0.5rem;
+        .nav-links a:hover {
+            background: #f8f9fa;
         }
 
         footer {
@@ -89,7 +95,11 @@
 </head>
 <body>
     <header>
-        <h1>Snake Game</h1>
+        <h1>Wayne's Development Playground</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="aboutme.html">About Me</a>
+        </div>
     </header>
 
     <div class="container">
@@ -97,8 +107,8 @@
             <iframe src="snake.html" title="Snake Game"></iframe>
         </div>
 
-        <div class="instructions">
-            <h2>How to Play</h2>
+        <div class="section">
+            <h2>How to Play Snake</h2>
             <ul>
                 <li>Use the arrow keys to control the snake</li>
                 <li>Eat the food to grow longer</li>
@@ -110,7 +120,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Snake Game. All rights reserved.</p>
+        <p>&copy; 2024 Wayne's Development Playground. All rights reserved.</p>
     </footer>
 </body>
 </html> 
